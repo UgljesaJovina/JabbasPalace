@@ -1,39 +1,19 @@
-import React, { useEffect, useRef } from 'react';
-import { Socket, io } from 'socket.io-client';
-import { Player } from './Interfaces/Player';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { NameSelect } from "./Components/NameSelect";
+import "./Styles/lobbystyle.css"
+import { GameType } from "./Components/GameType";
 
 function App() {
 
-    const { current: socket } = useRef(io("ws://localhost:5050"));
-    let myPlayer: Player;
-    let allPlayers: Player[];
-
-    useEffect(() => {
-        socket.connect();
-
-        socket.on("player_list", (players: Player[]) => {
-            allPlayers = players;
-        });
-
-        socket.emit("give_name", prompt("What will be your name?"));
-
-        socket.on("update_player_list", (data: string) => {
-            const player: Player = JSON.parse(data);
-            console.log(`A NEWWW CHALLENGERR! ${player.name} ${player.socketId}`);
-            allPlayers.push(player);
-            if (!myPlayer && player.socketId === socket.id) myPlayer = player;
-        });
-
-        return () => {
-            if(socket){
-                socket.close();
-            }
-        }
-    }, [socket])
 
     return (
-        <div>
-            
+        <div className="background">
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<NameSelect />} />
+                    <Route path="/game-type" element={<GameType />} />
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 }
