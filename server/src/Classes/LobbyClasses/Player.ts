@@ -1,10 +1,16 @@
+import { Socket } from "socket.io";
+
 export class Player {
-    public socketId: string;
-    public name: string;
+    public socket: Socket;
+    public name: string | undefined;
     public isAdmin = false;
 
-    constructor(socketId: string, name: string) {
-        this.socketId = socketId;
+    constructor(socket: Socket, name?: string) {
+        this.socket = socket;
+        this.name = name;
+    }
+
+    public setName = (name: string) => {
         this.name = name;
     }
 }

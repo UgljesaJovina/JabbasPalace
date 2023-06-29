@@ -1,3 +1,3 @@
-export default function Lobby() {
+export const Lobby = () => {
 
 }

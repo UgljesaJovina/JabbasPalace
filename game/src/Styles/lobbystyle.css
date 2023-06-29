@@ -45,3 +45,17 @@
 .empty-input {
     border-color: red;
 }
+
+.game-type {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.game-type button {
+    font-size: xx-large;
+    padding: 2%;
+    margin: 5% 0;
+    border: none;
+    border-radius: 15px;
+}

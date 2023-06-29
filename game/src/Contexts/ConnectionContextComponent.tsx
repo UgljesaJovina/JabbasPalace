@@ -13,7 +13,7 @@ export const ConnectionProvider: React.FC<PropsWithChildren> = ({children}) => {
 
     useEffect(() => {
         ConnectionDispatch({ type: "set_socket", payload: socket })
-    }, [socket])
+    }, [socket]);
 
     return (
         <ConnectionContextProvider value={{ connectionState: ConnectionState, connectionDispatch: ConnectionDispatch }}>

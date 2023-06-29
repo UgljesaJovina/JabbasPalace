@@ -1,4 +1,4 @@
-export function Loading() {
+export const Loading = () => {
     return (
         <h1>
             Loading...

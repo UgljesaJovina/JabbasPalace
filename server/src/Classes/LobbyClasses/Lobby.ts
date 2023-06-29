@@ -22,7 +22,7 @@ export class Lobby {
     public StartGame = (): Room | null => {
         if (this.players.length != 4) return null;
         this.inProgress = true;
-        return new Room(this.uid, this.name, this.players.map(p => new GamePlayer(p.socketId, p.name)));
+        return new Room(this.uid, this.name, this.players.map(p => new GamePlayer(p.socket, p.name)));
     }
 
     public AddPlayer = (player: Player) => {
@@ -31,7 +31,7 @@ export class Lobby {
     }
 
     public RemovePlayer = (playerId: string) => {
-        this.players = this.players.filter(p => p.socketId !== playerId);
+        this.players = this.players.filter(p => p.socket.id !== playerId);
         this.isOpen = true;
     }
 }

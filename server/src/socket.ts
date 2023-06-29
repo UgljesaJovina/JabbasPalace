@@ -3,7 +3,7 @@ import { Socket, Server } from 'socket.io';
 import { Lobby } from './Classes/LobbyClasses/Lobby';
 import { Player } from './Classes/LobbyClasses/Player';
 import { Room } from './Classes/GameClasses/Room';
-import { nameCallback } from './Callbacks/PlayerCallbacks';
+import { playerCallbacks } from './Callbacks/PlayerCallbacks';
 
 /** Master list of all available lobbies */
 export const lobbies: Lobby[]  = [];
@@ -34,6 +34,7 @@ export class ServerSocket {
     }
 
     StartListeners = (socket: Socket) => {
-        socket.on("send_name", nameCallback);
+        players.push(new Player(socket));
+        playerCallbacks(socket);
     }
 }

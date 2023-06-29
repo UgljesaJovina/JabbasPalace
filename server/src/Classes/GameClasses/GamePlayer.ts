@@ -1,3 +1,4 @@
+import { Socket } from "socket.io";
 import { Player } from "../LobbyClasses/Player";
 import { Card } from "./Card";
 
@@ -6,8 +7,8 @@ export class GamePlayer extends Player {
     public handCards: Card[] = []
     public playedCards: Card[] = []
 
-    constructor(socketId: string, name: string) {
-        super(socketId, name);
+    constructor(socket: Socket, name: string | undefined) {
+        super(socket, name);
     }
 
     public Serialize = () : string => {
