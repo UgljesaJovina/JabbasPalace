@@ -4,11 +4,11 @@ import { useNavigate } from "react-router";
 import "../Styles/gameType.css";
 
 export const GameType = () => {
-    const { connectionState: conn } = useConnectionContext();
+    const { connectionState: {name} } = useConnectionContext();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!conn.name) navigate("/");
+        if (!name) navigate("/");
     }, []);
 
     return (

@@ -21,4 +21,8 @@ export const lobbyCallbacks = (socket: Socket, io: Server) => {
         approve(lobby.uid);
         updateLobbyList(lobby);
     });
+
+    socket.on("request_room_enter", (uid: string) => {
+        // TO-DO
+    })
 }

@@ -6,7 +6,7 @@ export const playerCallbacks = (socket: Socket, io: Server) => {
         const player = players.find(p => p.socket === socket);
         player?.setName(name);
         approve(); 
-        // ovaj metod ce se pozvati ne client strani da bi mu dao doznanja da je event primljen
+        // ovaj metod ce se pozvati na client strani da bi mu dao doznanja da je event primljen
         // otprilike ekvivalenta req-res patterna http-a
     });
 

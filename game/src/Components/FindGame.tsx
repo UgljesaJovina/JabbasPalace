@@ -13,16 +13,16 @@ export interface ILobbyListObject {
 }
 
 export const FindGame = () => {
-    const { connectionState: conn, connectionDispatch } = useConnectionContext();
+    const { connectionState: {socket, name}, connectionDispatch } = useConnectionContext();
     const [lobbies, setLobbies] = useState<ILobbyListObject[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!conn.socket) return;
-        // if (!conn.name) navigate("/", { replace: true });
+        if (!socket) return;
+        // if (!name) navigate("/", { replace: true });
 
-        conn.socket.emit("request_lobbies");
-        conn.socket.on("send_lobbies", (lobbies: ILobbyListObject[]) => {
+        socket.emit("request_lobbies");
+        socket.on("send_lobbies", (lobbies: ILobbyListObject[]) => {
             setLobbies(lobbies);
         });
     }, []);
@@ -34,13 +34,13 @@ export const FindGame = () => {
                 <hr />
             </div>
             <div className="lobby-list">
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass inProgress players={3} />
+                <LobbyListObject uid="asd" name="Epic lobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby thing" pass inProgress players={3} />
                 <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
                 <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
+                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
+                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
+                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
+                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
                 <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
                 <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
                 <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
