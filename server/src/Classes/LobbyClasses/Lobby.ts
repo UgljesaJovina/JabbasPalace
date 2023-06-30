@@ -19,10 +19,11 @@ export class Lobby {
         this.password = password;
     }
 
-    public StartGame = (): Room | null => {
-        if (this.players.length != 4) return null;
+    public StartGame = (): Room => {
         this.inProgress = true;
-        return new Room(this.uid, this.name, this.players.map(p => new GamePlayer(p.socket, p.name)));
+        const room = new Room(this.uid, this.name, []);
+        room.players = this.players.map(p => new GamePlayer(p.socket, p.name, room));
+        return room;
     }
 
     public AddPlayer = (player: Player) => {
@@ -33,5 +34,15 @@ export class Lobby {
     public RemovePlayer = (playerId: string) => {
         this.players = this.players.filter(p => p.socket.id !== playerId);
         this.isOpen = true;
+    }
+
+    public Serialize = () => {
+        return { 
+            uid: this.uid, 
+            name: this.name, 
+            playerNum: this.players.length, 
+            pass: (this.password ? true : false),
+            inProgress: this.inProgress
+        }
     }
 }

@@ -2,18 +2,26 @@ import { createContext, useContext } from "react";
 import { Socket } from "socket.io-client";
 import { Dispatch } from 'react';
 
+export interface IRoom {
+    uid: string;
+    name: string;
+    password: string | undefined;
+}
+
 export interface IConnectionInfo {
     socket: Socket | undefined;
     name: string | undefined;
+    lobby: IRoom | undefined;
 }
 
 export const defaultConnectionInfo: IConnectionInfo = {
     socket: undefined,
-    name: undefined
+    name: undefined,
+    lobby: undefined
 }
 
-export type TConnectionContextActions = "set_socket" | "set_name";
-export type TConnectionContextPayload = Socket | string;
+export type TConnectionContextActions = "set_socket" | "set_name" | "set_room";
+export type TConnectionContextPayload = Socket | string | IRoom;
 
 export interface IConnectionContextActions {
     type: TConnectionContextActions,
@@ -34,6 +42,9 @@ export const ConnectionReducer = (state: IConnectionInfo, action: IConnectionCon
             break;
         case "set_socket":
             return { ...state, socket: action.payload as Socket };
+            break;
+        case "set_room":
+            return { ...state, lobby: action.payload as IRoom }
             break;
         default:
             return state;

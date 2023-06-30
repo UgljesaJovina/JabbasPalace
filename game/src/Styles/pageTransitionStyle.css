@@ -2,6 +2,7 @@
   opacity: 0;
   transform: translateX(100%);
   z-index: 1;
+  position: absolute;
 }
 
 .slide-enter.slide-enter-active {

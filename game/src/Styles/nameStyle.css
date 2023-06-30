@@ -1,0 +1,31 @@
+.name-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.name-input * {
+    font-size: xx-large;
+    text-align: center;
+    margin: 5% 0;
+}
+
+.name-input input {
+    padding: 2%;
+}
+
+.name-input input::placeholder {
+    font-style: italic;
+}
+
+.name-input button {
+    padding: 2%;
+    border: none;
+    border-radius: 15px;
+    background-color: limegreen;
+    color: white;
+    cursor: pointer;
+}
+
+.empty-input {
+    border-color: red;
+}

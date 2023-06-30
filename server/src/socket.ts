@@ -4,6 +4,7 @@ import { Lobby } from './Classes/LobbyClasses/Lobby';
 import { Player } from './Classes/LobbyClasses/Player';
 import { Room } from './Classes/GameClasses/Room';
 import { playerCallbacks } from './Callbacks/PlayerCallbacks';
+import { lobbyCallbacks } from './Callbacks/LobbyCallbacks';
 
 /** Master list of all available lobbies */
 export const lobbies: Lobby[]  = [];
@@ -35,6 +36,7 @@ export class ServerSocket {
 
     StartListeners = (socket: Socket) => {
         players.push(new Player(socket));
-        playerCallbacks(socket);
+        playerCallbacks(socket, this.io);
+        lobbyCallbacks(socket, this.io);
     }
 }
