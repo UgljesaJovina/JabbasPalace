@@ -8,13 +8,13 @@ export const GameType = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!name) navigate("/");
+        if (!name) navigate("/", { replace: true });
     }, []);
 
     return (
         <div className="game-type">
-            <button onClick={() => navigate("/create-room"/*, { replace: true }*/)} style={{backgroundColor: "greenyellow"}}>Create a room</button>
-            <button onClick={() => navigate("/find-room"/*, { replace: true }*/)} style={{backgroundColor: "blueviolet"}}> Join a room</button>
+            <button onClick={() => navigate("/create-room", { replace: true })} style={{backgroundColor: "greenyellow"}}>Create a room</button>
+            <button onClick={() => navigate("/find-room", { replace: true })} style={{backgroundColor: "blueviolet"}}> Join a room</button>
         </div>
     );
 }

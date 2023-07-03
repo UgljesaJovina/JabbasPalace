@@ -8,15 +8,24 @@ export class Lobby {
     public name: string;
     public players: Player[] = [];
 
-    public password: string | undefined;
+    public password: string | null;
     public isOpen = true;
     public inProgress = false;
 
-    constructor(name: string, player: Player, password?: string) {
+    public onRemove: () => void;
+    public updatePlayerList: (players: Player[]) => void;
+    // public updateLobbyAdmin: (lobby: Lobby, player: Player) => void;
+
+    constructor(name: string, player: Player, password: string | null, onRemove: () => void, 
+        updatePlayerList: (players: Player[]) => void) 
+    {
         this.uid = v4();
         this.name = name;
         this.players.push(player);
         this.password = password;
+        this.onRemove = onRemove;
+        this.updatePlayerList = updatePlayerList;
+        // this.updateLobbyAdmin = updateLobbyAdmin;
     }
 
     public StartGame = (): Room => {
@@ -28,12 +37,22 @@ export class Lobby {
 
     public AddPlayer = (player: Player) => {
         this.players.push(player);
+
+        if (this.players.some(p => p.isAdmin)) player.isAdmin = false;
+        else player.isAdmin = true;
+
+        this.updatePlayerList(this.players);
         if (this.players.length === 4) this.isOpen = false;
     }
 
     public RemovePlayer = (playerId: string) => {
+        console.log(this.players);
         this.players = this.players.filter(p => p.socket.id !== playerId);
+        console.log(this.players);
         this.isOpen = true;
+        if (this.players.length === 0) this.onRemove();
+        if (!this.players.some(p => p.isAdmin) && this.players.length > 0) this.players[0].isAdmin = true;
+        this.updatePlayerList(this.players);
     }
 
     public Serialize = () => {

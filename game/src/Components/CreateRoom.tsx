@@ -15,16 +15,21 @@ export const CreateRoom = () => {
     const { current: roomPass } = passInput;
 
     useEffect(() => {
-        if (!name) navigate("/");
-    }, []);
+        if (!name) navigate("/", { replace: true });
+    }, [name, navigate]);
 
     const createRoom = () => {
         if (!socket || !roomName) return;
 
         if (roomName.value.length >= 3) {
-            socket.emit("create_lobby", roomName.value, roomPass?.value, (uid: string) => {
-                connectionDispatch({ type: "set_room", payload: { uid: uid, name: roomName.value, password: roomPass?.value } });
-                navigate(`/room?uid=${uid}`);
+            socket.emit("create_lobby", roomName.value, roomPass?.value ? roomPass.value : null, (uid: string) => {
+                connectionDispatch({ type: "set_room", payload: { 
+                    uid: uid, 
+                    name: roomName.value, 
+                    password: roomPass?.value ? roomPass.value : null 
+                }});
+
+                navigate(`/room?uid=${uid}`, { replace: true });
             });
         }
         else
@@ -35,7 +40,7 @@ export const CreateRoom = () => {
         <div className="create-room">
             <input placeholder="Room Name" className={`${emptyInput ? "empty-input" : ""}`} autoFocus ref={nameInput}
                 onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
-            <input placeholder="password" ref={passInput} />
+            <input placeholder="password" ref={passInput} onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
             <button onClick={createRoom}>Create</button>
         </div>
     )

@@ -16,4 +16,8 @@ export class Player {
     public setName = (name: string) => {
         this.name = name;
     }
+
+    public Serialize = () => {
+        return { id: this.socket.id, name: this.name, isAdmin: this.isAdmin };
+    }
 }

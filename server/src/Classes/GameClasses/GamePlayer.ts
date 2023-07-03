@@ -14,13 +14,17 @@ export class GamePlayer extends Player {
         this.room = room;
     }
 
-    public Serialize = () : string => {
-        return JSON.stringify(
-            { 
-                ...this, 
-                handCards: this.handCards.map(c => c.serialize()), 
-                playedCards: this.playedCards.map(c => c.serialize())
-            }
-        );
+    public static GetFromPlayer(player: Player, room: Room) {
+        return new GamePlayer(player.socket, player.name, room);
     }
+
+    // public Serialize = () => {
+    //     return
+    //         { 
+    //             ...this, 
+    //             handCards: this.handCards.map(c => c.serialize()), 
+    //             playedCards: this.playedCards.map(c => c.serialize())
+    //         }
+    //     ;
+    // }
 }

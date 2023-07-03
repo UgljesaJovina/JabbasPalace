@@ -22,7 +22,7 @@ export const NameSelect = () => {
             socket.emit("send_name", name.value, () => {
                 connectionDispatch({ type: "set_name", payload: name.value })
     
-                navigate("/game-type"/*, { replace: true }*/); 
+                navigate("/game-type", { replace: true }    ); 
                 // replace ce da ukloni browser history kako igrc ne bi mogao da se vrti na name select
                 // trenutno je u komentaru radi debuggovanja
             });

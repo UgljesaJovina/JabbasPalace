@@ -3,29 +3,42 @@ import { useConnectionContext } from "../Contexts/ConnectionContext"
 import "../Styles/lobbyListStyle.css"
 import { LobbyListObject } from "./LobbyListObject";
 import { useNavigate } from "react-router";
+import ILobbyListObject from "../Interfaces/ILobbyListObject";
 
-export interface ILobbyListObject {
-    uid: string;
-    name: string;
-    players: number;
-    pass: boolean;
-    inProgress: boolean;
-}
+type LobbyUpdateActions = "add" | "remove" | "update";
 
 export const FindGame = () => {
-    const { connectionState: {socket, name}, connectionDispatch } = useConnectionContext();
+    const { connectionState: { socket, name } } = useConnectionContext();
     const [lobbies, setLobbies] = useState<ILobbyListObject[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!socket) return;
-        // if (!name) navigate("/", { replace: true });
+        if (!name) navigate("/", { replace: true });
 
-        socket.emit("request_lobbies");
-        socket.on("send_lobbies", (lobbies: ILobbyListObject[]) => {
+        socket.emit("request_lobbies", (lobbies: ILobbyListObject[]) => {
+            console.log("Got lobbies", lobbies);
             setLobbies(lobbies);
         });
-    }, []);
+
+        socket.on("update_lobby_list", (lobby: ILobbyListObject, action: LobbyUpdateActions) => {
+            switch(action) {
+                case "add":
+                    setLobbies(curr => [...curr, lobby]);
+                    break;
+                case "remove":
+                    setLobbies(curr => curr.filter(l => l.uid !== lobby.uid));
+                    break;
+                case "update":
+                    setLobbies(curr => curr.map(l => l.uid === lobby.uid ? lobby : l))
+                    break;
+            }
+        });
+
+        return () => {
+            socket.removeAllListeners();
+        }
+    }, [socket]);
 
     return (
         <div className="find-game">
@@ -34,35 +47,8 @@ export const FindGame = () => {
                 <hr />
             </div>
             <div className="lobby-list">
-                <LobbyListObject uid="asd" name="Epic lobaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaby thing" pass inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={true} inProgress={false} players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
-                <LobbyListObject uid="asd" name="Epic lobby thing" pass={false} inProgress players={3} />
                 {lobbies.map(l => <LobbyListObject key={l.uid} 
-                    uid={l.uid} name={l.name} pass={l.pass} inProgress={l.inProgress} players={l.players} />)}
+                    uid={l.uid} name={l.name} pass={l.pass} inProgress={l.inProgress} playerNum={l.playerNum} />)}
             </div>
         </div>
     )
