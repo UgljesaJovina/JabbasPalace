@@ -55,8 +55,6 @@ export class ServerSocket {
         playerCallbacks(socket, this.io, connParams);
         lobbyCallbacks(socket, this.io, connParams);
         roomCallbacks(socket, this.io, connParams);
-
-        // TO-DO, pogledaj sticky notes
     }
 }
 

@@ -4,7 +4,6 @@ import { Lobby } from "./Lobby";
 export class Player {
     public socket: Socket;
     public name: string | undefined;
-    public isAdmin = false;
     public lobby: Lobby | null; // lobby the player is currently in
 
     constructor(socket: Socket, name?: string) {
@@ -18,6 +17,6 @@ export class Player {
     }
 
     public Serialize = () => {
-        return { id: this.socket.id, name: this.name, isAdmin: this.isAdmin };
+        return { socketId: this.socket.id, name: this.name as string, isAdmin: this.lobby?.admin === this };
     }
 }

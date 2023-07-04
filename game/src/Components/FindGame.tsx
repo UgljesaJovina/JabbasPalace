@@ -4,20 +4,29 @@ import "../Styles/lobbyListStyle.css"
 import { LobbyListObject } from "./LobbyListObject";
 import { useNavigate } from "react-router";
 import ILobbyListObject from "../Interfaces/ILobbyListObject";
+import { RoomPasswordModal } from "./RoomPasswordInput";
 
 type LobbyUpdateActions = "add" | "remove" | "update";
+
+export interface IPassModalParams {
+    uid: string;
+    name: string;
+    show: boolean;
+}
 
 export const FindGame = () => {
     const { connectionState: { socket, name } } = useConnectionContext();
     const [lobbies, setLobbies] = useState<ILobbyListObject[]>([]);
+    const [passwordModal, setPasswordModal] = useState<IPassModalParams>({ uid: "", name: "", show: false });
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!socket) return;
-        if (!name) navigate("/", { replace: true });
+        if (!name || !socket || !socket.connected) {
+            navigate("/", { replace: true });
+            return;
+        } 
 
         socket.emit("request_lobbies", (lobbies: ILobbyListObject[]) => {
-            console.log("Got lobbies", lobbies);
             setLobbies(lobbies);
         });
 
@@ -36,7 +45,7 @@ export const FindGame = () => {
         });
 
         return () => {
-            socket.removeAllListeners();
+            socket.removeAllListeners("update_lobby_list");
         }
     }, [socket]);
 
@@ -47,9 +56,10 @@ export const FindGame = () => {
                 <hr />
             </div>
             <div className="lobby-list">
-                {lobbies.map(l => <LobbyListObject key={l.uid} 
-                    uid={l.uid} name={l.name} pass={l.pass} inProgress={l.inProgress} playerNum={l.playerNum} />)}
+                {lobbies.map(l => <LobbyListObject key={l.uid} uid={l.uid} name={l.name} 
+                    pass={l.pass} inProgress={l.inProgress} playerNum={l.playerNum} setModal={setPasswordModal} />)}
             </div>
+            <RoomPasswordModal params={passwordModal} setModal={setPasswordModal} />
         </div>
     )
 }

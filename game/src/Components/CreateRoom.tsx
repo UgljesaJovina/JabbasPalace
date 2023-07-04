@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "../Styles/createRoomStyle.css"
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { useConnectionContext } from "../Contexts/ConnectionContext";
 
 export const CreateRoom = () => {
@@ -18,8 +18,10 @@ export const CreateRoom = () => {
         if (!name) navigate("/", { replace: true });
     }, [name, navigate]);
 
+    if (!socket || !socket.connected) return <Navigate to="/" />
+
     const createRoom = () => {
-        if (!socket || !roomName) return;
+        if (!roomName) return;
 
         if (roomName.value.length >= 3) {
             socket.emit("create_lobby", roomName.value, roomPass?.value ? roomPass.value : null, (uid: string) => {
@@ -40,7 +42,7 @@ export const CreateRoom = () => {
         <div className="create-room">
             <input placeholder="Room Name" className={`${emptyInput ? "empty-input" : ""}`} autoFocus ref={nameInput}
                 onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
-            <input placeholder="password" ref={passInput} onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
+            <input placeholder="password" type="password" ref={passInput} onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
             <button onClick={createRoom}>Create</button>
         </div>
     )

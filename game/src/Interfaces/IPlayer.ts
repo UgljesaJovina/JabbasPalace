@@ -1,6 +1,4 @@
-import { Card } from "./Card";
-
-export interface Player {
+export interface IPlayer {
     socketId: string;
     name: string;
     isAdmin: boolean;

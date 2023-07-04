@@ -29,8 +29,6 @@ export interface IConnectionContextParams {
 }
 
 export const ConnectionReducer = (state: IConnectionInfo, action: IConnectionContextActions): IConnectionInfo => {
-    console.log(`Received a reducer request, Action: ${action.type}, Payload: ${action.payload}`);
-
     switch (action.type) {
         case "set_name":
             return { ...state, name: action.payload as string };

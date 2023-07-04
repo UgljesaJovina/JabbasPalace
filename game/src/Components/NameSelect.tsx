@@ -6,17 +6,19 @@ import "../Styles/nameStyle.css";
 
 export const NameSelect = () => {
     /** All the props of the current connection */
-    const { connectionState: {socket}, connectionDispatch } = useConnectionContext();
+    const { connectionState: { socket }, connectionDispatch } = useConnectionContext();
 
     const nameInput = useRef<HTMLInputElement>(null);
     
     const [emptyInput, setEmptyInput] = useState(false);
     const navigate = useNavigate();
+
+    if (!socket) return <Loading />
     
     const sendName = () => {
         const {current: name} = nameInput;
         
-        if (!socket || !name) return;
+        if (!name) return;
 
         if (name.value.length >= 3) {
             socket.emit("send_name", name.value, () => {
@@ -30,8 +32,6 @@ export const NameSelect = () => {
         else 
             setEmptyInput(true);
     }
-
-    if (!socket) return <Loading />
 
     return (
         <div className="name-input">
