@@ -13,7 +13,7 @@
     font-style: italic;
 }
 
-.create-room button {
+.create-room>button {
     padding: 2%;
     border: none;
     border-radius: 15px;

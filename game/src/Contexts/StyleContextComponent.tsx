@@ -22,3 +22,11 @@ export const StyleProvider: React.FC<PropsWithChildren> = ({children}) => {
         </StyleContext.Provider>
     );
 }
+
+
+/**
+ * Dead component
+ * za vreme tranzicije nestane sav css sa stare komponente
+ * moze da se popravi sa prevCss promenljivom pa da se zadrze oba stila
+ * ali malo nema smisla
+ */

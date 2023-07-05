@@ -7,6 +7,7 @@ import { PageTransition } from "./Components/PageTransition";
 import { CreateRoom } from "./Components/CreateRoom";
 import { FindGame } from "./Components/FindGame";
 import { Lobby } from "./Components/Lobby";
+import { Game } from "./Components/Game";
 
 function App() {
     const location = useLocation();
@@ -20,6 +21,7 @@ function App() {
                     <Route path="/create-room" element={<CreateRoom />} />
                     <Route path="/find-room" element={<FindGame />} />
                     <Route path="/room" element={<Lobby />} />
+                    <Route path="/game" element={<Game />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </PageTransition>

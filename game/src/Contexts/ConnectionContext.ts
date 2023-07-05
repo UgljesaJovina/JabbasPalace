@@ -16,7 +16,7 @@ export const defaultConnectionInfo: IConnectionInfo = {
 }
 
 export type TConnectionContextActions = "set_socket" | "set_name" | "set_room";
-export type TConnectionContextPayload = Socket | string | IRoom;
+export type TConnectionContextPayload = Socket | string | IRoom | null;
 
 export interface IConnectionContextActions {
     type: TConnectionContextActions,
@@ -35,7 +35,7 @@ export const ConnectionReducer = (state: IConnectionInfo, action: IConnectionCon
         case "set_socket":
             return { ...state, socket: action.payload as Socket };
         case "set_room":
-            return { ...state, lobby: action.payload as IRoom }
+            return { ...state, lobby: action.payload as IRoom | null }
         default:
             return state;
     }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "../Styles/createRoomStyle.css"
 import { Navigate, useNavigate } from "react-router";
 import { useConnectionContext } from "../Contexts/ConnectionContext";
+import { BackButton } from "./BackButton";
 
 export const CreateRoom = () => {
     const { connectionState, connectionDispatch } = useConnectionContext();
@@ -40,6 +41,7 @@ export const CreateRoom = () => {
 
     return (
         <div className="create-room">
+            <BackButton location="/game-type" />
             <input placeholder="Room Name" className={`${emptyInput ? "empty-input" : ""}`} autoFocus ref={nameInput}
                 onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />
             <input placeholder="password" type="password" ref={passInput} onKeyDown={e => { if (e.key === "Enter") createRoom(); }} />

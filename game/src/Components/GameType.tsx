@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useConnectionContext } from "../Contexts/ConnectionContext";
 import { useNavigate } from "react-router";
 import "../Styles/gameType.css";
+import { BackButton } from "./BackButton";
 
 export const GameType = () => {
     const { connectionState: {name} } = useConnectionContext();
@@ -13,6 +14,7 @@ export const GameType = () => {
 
     return (
         <div className="game-type">
+            <BackButton location="/" />
             <button onClick={() => navigate("/create-room", { replace: true })} style={{backgroundColor: "greenyellow"}}>Create a room</button>
             <button onClick={() => navigate("/find-room", { replace: true })} style={{backgroundColor: "blueviolet"}}> Join a room</button>
         </div>

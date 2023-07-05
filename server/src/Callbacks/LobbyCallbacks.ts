@@ -32,11 +32,11 @@ export const lobbyCallbacks = (socket: Socket, io: Server, p: ILobbyParams) => {
     // }
     // potencijalno nije potrebno zato sto ce updatePlayerList vec poslati admina novog
     
-        socket.on("create_lobby", (name: string, pass: string | null, approve: (uid: string) => void) => {
+        socket.on("create_lobby", (name: string, pass: string | null, response: (uid: string) => void) => {
             p.lobby = new Lobby(name, p.player, pass, removeLobby, updatePlayerList);
             p.player.lobby = p.lobby;
             lobbies.set(p.lobby.uid, p.lobby);
-            approve(p.lobby.uid);
+            response(p.lobby.uid);
             socket.join(p.lobby.uid);
             updateLobbyList(p.lobby, "add");
         });
@@ -45,9 +45,9 @@ export const lobbyCallbacks = (socket: Socket, io: Server, p: ILobbyParams) => {
         callback([...lobbies.values()].map(l => l.Serialize()));
     });
 
-    socket.on("request_lobby_enter", (uid: string, pass: string | null, result: (error?: string) => void) => {
+    socket.on("request_lobby_enter", (uid: string, pass: string | null, response: (error?: string) => void) => {
         if (!lobbies.has(uid)) {
-            result("no room with that id exists");
+            response("no room with that id exists");
             return;
         }
 
@@ -55,13 +55,13 @@ export const lobbyCallbacks = (socket: Socket, io: Server, p: ILobbyParams) => {
 
         if (l.password && pass) {
             if (l.password !== pass) {
-                result("wrong password!!!");
+                response("wrong password!!!");
                 return;
             }
         }
 
         if (!l.isOpen) {
-            result("lobby is full!");
+            response("lobby is full!");
             return;
         }
 
@@ -69,7 +69,7 @@ export const lobbyCallbacks = (socket: Socket, io: Server, p: ILobbyParams) => {
         p.player.lobby = l;
         l.AddPlayer(p.player);
         socket.join(uid);
-        result();
+        response();
     });
 
     socket.on("leave_lobby", () => {
@@ -81,11 +81,21 @@ export const lobbyCallbacks = (socket: Socket, io: Server, p: ILobbyParams) => {
         p.lobby = null;
     });
 
-    socket.on("request_player_data", (callback: (players: ILobbyPlayer[]) => void) => {
+    socket.on("request_player_data", (response: (players: ILobbyPlayer[]) => void) => {
         if (!p.lobby) return;
 
-        callback(p.lobby.players.map(p => p.Serialize()));
-    })
+        response(p.lobby.players.map(p => p.Serialize()));
+    });
+
+    socket.on("request-start-game", (response: (error?: string) => void) => {
+        if (p.lobby?.admin !== p.player) { 
+            response("ure not the admin BAAAAAAAKAAAAAAA!");
+            return;
+        }
+
+        io.to(p.lobby.uid).emit("start-game");
+        p.lobby.StartGame();
+    });
 }
 
 interface ILobbyParams {

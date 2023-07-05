@@ -1,0 +1,33 @@
+.c.back-button {
+    margin: 0;
+    padding: 0;
+    color: black;
+    background-color: rgb(212, 212, 212);
+    position: fixed;
+    top: 50px;
+    left: 50px;
+    height: 50px;
+    width: 50px;
+    border: none;
+    border-radius: 50%;
+    font-size: xx-large;
+    cursor: pointer;
+    transition: background-color .25s;
+    animation: appear .6s forwards;
+}
+
+.c.back-button:hover {
+    background-color: white;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    } 
+    60% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

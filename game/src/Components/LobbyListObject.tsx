@@ -6,8 +6,8 @@ import ILobbyListObject from "../Interfaces/ILobbyListObject";
 import { Dispatch } from "react";
 import { IPassModalParams } from "./FindGame";
 
-export const LobbyListObject: React.FC<ILobbyListObject & { setModal: Dispatch<IPassModalParams> }> =  
-    ({ uid, name, playerNum, pass, inProgress, setModal }) => { // ovo posle & samo sluzi da bi mogla da se passuje func za modal
+export const LobbyListObject: React.FC<ILobbyListObject & { setModal: Dispatch<IPassModalParams>, order: number }> =  
+    ({ uid, name, playerNum, pass, inProgress, setModal, order }) => { // ovo posle & samo sluzi da bi mogla da se passuje func za modal
 
     const { connectionState: { socket }, connectionDispatch } = useConnectionContext();
     const navigate = useNavigate();
@@ -34,11 +34,11 @@ export const LobbyListObject: React.FC<ILobbyListObject & { setModal: Dispatch<I
     }
 
     return (
-        <div className="lobby-list-object" onClick={enterLobby}>
+        <div className="lobby-list-object" onClick={enterLobby} style={{animationDelay: `${300 + order * 200}ms`}} >
             <img className="pass-img" src={key} style={{opacity: (pass ? 1 : 0)}} alt="" />
             <label className="name-label">{name}</label>
-            <label className="progress-label" style={{color: (inProgress ? "red" : "green")}}>
-                {(inProgress ? "IN PROGRESS" : "OPEN")}
+            <label className="progress-label" style={{color: (inProgress || playerNum >= 4 ? "red" : "green")}}>
+                {(inProgress ? "IN PROGRESS" :  (playerNum === 4 ? "FULL" : "OPEN"))}
             </label>
             <div className="player-number">
                 <img src={silhouette} alt="" />

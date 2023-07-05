@@ -5,6 +5,7 @@ import { LobbyListObject } from "./LobbyListObject";
 import { useNavigate } from "react-router";
 import ILobbyListObject from "../Interfaces/ILobbyListObject";
 import { RoomPasswordModal } from "./RoomPasswordInput";
+import { BackButton } from "./BackButton";
 
 type LobbyUpdateActions = "add" | "remove" | "update";
 
@@ -33,7 +34,7 @@ export const FindGame = () => {
         socket.on("update_lobby_list", (lobby: ILobbyListObject, action: LobbyUpdateActions) => {
             switch(action) {
                 case "add":
-                    setLobbies(curr => [...curr, lobby]);
+                    setLobbies(curr => [lobby, ...curr]);
                     break;
                 case "remove":
                     setLobbies(curr => curr.filter(l => l.uid !== lobby.uid));
@@ -51,12 +52,13 @@ export const FindGame = () => {
 
     return (
         <div className="find-game">
+            <BackButton location="/game-type" />
             <div className="info">
                 <p>{lobbies.length} available lobbies</p>
                 <hr />
             </div>
             <div className="lobby-list">
-                {lobbies.map(l => <LobbyListObject key={l.uid} uid={l.uid} name={l.name} 
+                {lobbies.map((l, i) => <LobbyListObject key={l.uid} uid={l.uid} name={l.name} order={i}
                     pass={l.pass} inProgress={l.inProgress} playerNum={l.playerNum} setModal={setPasswordModal} />)}
             </div>
             <RoomPasswordModal params={passwordModal} setModal={setPasswordModal} />

@@ -4,7 +4,7 @@
     width: 20%;
 }
 
-.game-type button {
+.game-type>button {
     font-size: xx-large;
     padding: 2%;
     margin: 5% 0;

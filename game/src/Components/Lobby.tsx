@@ -5,12 +5,13 @@ import { IPlayer } from "../Interfaces/IPlayer";
 import { PlayerCard } from "./PlayerCard";
 import "../Styles/lobbyStyle.css"
 import { WaitingCard } from "./WaitingCard";
+import { BackButton } from "./BackButton";
 
 type PlayerUpdateActions = "add" | "remove" | "update";
 
 export const Lobby = () => {
     const [players, setPlayers] = useState<IPlayer[]>([]);
-    const { connectionState: { name, socket, lobby } } = useConnectionContext();
+    const { connectionState: { name, socket, lobby }, connectionDispatch } = useConnectionContext();
     const navigate = useNavigate();
     const startGameStyle = {
         opacity: (players.length < 4 ? .5 : 1), 
@@ -41,18 +42,31 @@ export const Lobby = () => {
             }
         });
 
+        socket.on("start-game", () => {
+            navigate("/game", { replace: true });
+        });
+
         return () => { 
             socket!.removeAllListeners("update_player_list")
+            socket.removeAllListeners("start-game");
+            
+            connectionDispatch({ type:"set_room", payload: null });
+            socket.emit("leave_lobby");
         };
 
     }, []);
 
     const startGame = () => {
+        if (players.length < 4 || !socket || !lobby) return;
 
+        socket.emit("request-start-game", (error?: string) => {
+            if (error) alert(error)
+        })
     }
 
     return (
         <div className="lobby">
+            <BackButton location="/game-type" />
             <label className="lobby-name">{lobby?.name}</label>
             <hr />
             {players.map(p => <PlayerCard key={p.socketId} name={p.name} isAdmin={p.isAdmin} />)}
