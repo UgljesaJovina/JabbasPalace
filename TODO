@@ -1,0 +1,33 @@
+// alt + d = complete
+// alt + s = started
+// alt + c = canceled
+// ctrl + enter = kutijica
+
+Todo:
+  ✔ Han Solo @done(23-07-09 22:46)
+  ✔ The Guard @done(23-07-09 22:00)
+  ☐ C3P0
+  ☐ Salicious Crumb
+  ☐ R2D2
+  ☐ Mercinary
+  ☐ Chewbacca
+  ☐ Bib Fortuna
+  ☐ LandoCalrissian
+  ☐ Boba Stopalic
+  ☐ Leia Organa
+  ☐ Rancor
+  ☐ Luka nebeski setac
+  ☐ Jabba 
+  ☐ Player play card
+
+all callbacks: 
+  error_player_select
+  eliminate, socketId
+  request_player_target, (target: string)
+  request_player_card_target, -||-
+  request_card_power, (power: number)
+  target_player, targetId: strign
+  target_player_card, -||-
+  selected_power, power: number
+  draw_me: socketId, cardName
+  draw_enemy: socketId

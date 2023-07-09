@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { players } from "../socket";
 import { Player } from "../Classes/LobbyClasses/Player";
 
-export const playerCallbacks = (socket: Socket, io: Server, p: IPlayerParams) => { // p = params
+export const playerCallbacks = (socket: Socket, p: IPlayerParams) => { // p = params
     socket.on("send_name", (name: string, approve: () => void) => {
         p.player.setName(name);
         approve();

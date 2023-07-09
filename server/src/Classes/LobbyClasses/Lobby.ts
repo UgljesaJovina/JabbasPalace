@@ -32,11 +32,12 @@ export class Lobby {
         // this.updateLobbyAdmin = updateLobbyAdmin;
     }
 
-    public StartGame = () => {
+    public StartGame = (): Room => {
         this.inProgress = true;
-        const room = new Room(this.uid, this.name, []);
+        const players: GamePlayer[] = this.players.map(p => new GamePlayer(p.socket, p.name, room));
+        const room = new Room(this.uid, this.name, players);
         this.room = room;
-        room.players = this.players.map(p => new GamePlayer(p.socket, p.name, room));
+        return room;
     }
 
     public AddPlayer = (player: Player) => {

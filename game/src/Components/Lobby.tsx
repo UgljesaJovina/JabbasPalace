@@ -43,6 +43,7 @@ export const Lobby = () => {
         });
 
         socket.on("start-game", () => {
+            socket.emit("set-game-params");
             navigate("/game", { replace: true });
         });
 

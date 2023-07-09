@@ -15,7 +15,8 @@
     transition: background-color .25s;
     animation: appear .6s forwards;
 }
-
+/* Potrebno je da bude .c.back zbog prioriteta, ako ne stoji ovako onda se ostali stilovi koje stavljam
+na dugmice mesaju sa ovim. Da li to znaci da treba da stavim posebne klase na te dugmice? da. da li cu to da uradim? 🤣😹 */
 .c.back-button:hover {
     background-color: white;
 }

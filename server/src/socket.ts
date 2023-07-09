@@ -17,13 +17,14 @@ export const rooms = new Map<string, Room>();
 /** Master list of all connected players */
 export const players = new Map<string, Player>();
 
+// ove 3 mape su pre bile u klasi ali su izbacene za lepsi kod
+// io se koristi na jako malo mesta pa nije problem da ostane, vrv cu njega prebaciti u static i obrisati instance
+
 export class ServerSocket {
-    public static instance: ServerSocket;
-    public io: Server;
+    public static io: Server;
 
     constructor(server: HttpServer) {
-        ServerSocket.instance = this;
-        this.io = new Server(server, {
+        ServerSocket.io = new Server(server, {
             serveClient: false,
             pingInterval: 10000,
             pingTimeout: 5000,
@@ -33,7 +34,7 @@ export class ServerSocket {
             }
         });
 
-        this.io.on('connect', this.StartListeners);
+        ServerSocket.io.on('connect', this.StartListeners);
     }
 
     StartListeners = (socket: Socket) => {
@@ -52,9 +53,9 @@ export class ServerSocket {
 
         players.set(socket.id, connParams.player);
 
-        playerCallbacks(socket, this.io, connParams);
-        lobbyCallbacks(socket, this.io, connParams);
-        roomCallbacks(socket, this.io, connParams);
+        playerCallbacks(socket, connParams);
+        lobbyCallbacks(socket, connParams);
+        roomCallbacks(socket, connParams);
     }
 }
 
