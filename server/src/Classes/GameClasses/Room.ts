@@ -1,6 +1,8 @@
 import { ServerSocket } from "../../socket";
 import { delay } from "../../util";
+import { Player } from "../LobbyClasses/Player";
 import { Card } from "./Cards/Card";
+import { Guard } from "./Cards/Guard";
 import { GamePlayer } from "./GamePlayer";
 
 export class Room {
@@ -21,7 +23,7 @@ export class Room {
 
     public lastWinnerInd: number = 0;
 
-    constructor(uid: string, name: string, players: GamePlayer[]) {
+    constructor(uid: string, name: string, players: Player[]) {
         this.uid = uid;
         this.name = name;
 
@@ -29,13 +31,13 @@ export class Room {
 
         this.faceDownCard = this.deck[0];
 
-        this.players = players;
+        this.players = players.map(p => new GamePlayer(p.socket, p.name, this));
 
         this.startRound();
     }
 
     private buildDeck = (): Card[] => {
-        return []; // FIXME: OVO 
+        return [...Array(19)].map(i => new Guard()); // FIXME: OVO 
     }
 
     private startRound = async () => {
@@ -46,12 +48,19 @@ export class Room {
             await delay(300);
         }
         this.players.forEach(p => p.eliminated = false);
-        this.startGameplayLoop(i);
+        await this.startGameplayLoop(i);
     }
 
-    private startGameplayLoop = (i: number) => {
+    private startGameplayLoop = async (i: number) => {
         while (this.notElimPlayersNum > 1 && this.deck.length > 0) {
-            this.draw(this.notElimPlayers[i % this.notElimPlayersNum]);
+            const currPlayer = this.notElimPlayers[i % this.notElimPlayersNum];
+            ServerSocket.io.to(this.uid).emit("player_turn", currPlayer.socket.id);
+            try {
+                this.draw(currPlayer);
+                await (await currPlayer.playCard()) (currPlayer);
+                // currPlayer.playCard() vrati card effect koji onda u istoj liniji pokrenem sa currPlayer
+                i++;
+            } catch (error) {}
         }
     }
 

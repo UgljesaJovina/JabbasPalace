@@ -22,12 +22,17 @@ export const roomCallbacks = (socket: Socket, p: IRoomParams) => {
         ServerSocket.io.to(p.lobby.uid).emit("start-game");
     });
 
+    // zbog pristupa prema cuvanju podataka o igracu i sobi itd. mora client da pozove postavljanje parametara
     socket.on("set-game-params", () => {
         if (!p.lobby) return;
 
         p.room = p.lobby.room as Room;
         p.gamePlayer = p.room.players.find(gp => gp.socket === p.player.socket) as GamePlayer;
     });
+
+    socket.on("request_player_info", (callback: (players: any /* params iz gamePlayer.playerInfo() */) => void) => {
+        callback(p.room?.players.map(p => p.playerInfo()));
+    })
 
     socket.on("disconnect", () => {
         players.delete(socket.id);

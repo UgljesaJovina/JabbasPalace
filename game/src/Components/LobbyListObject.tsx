@@ -34,7 +34,7 @@ export const LobbyListObject: React.FC<ILobbyListObject & { setModal: Dispatch<I
     }
 
     return (
-        <div className="lobby-list-object" onClick={enterLobby} style={{animationDelay: `${300 + order * 200}ms`}} >
+        <div className="lobby-list-object" onClick={enterLobby} style={{animationDelay: `${200 + order * 200}ms`}} >
             <img className="pass-img" src={key} style={{opacity: (pass ? 1 : 0)}} alt="" />
             <label className="name-label">{name}</label>
             <label className="progress-label" style={{color: (inProgress || playerNum >= 4 ? "red" : "green")}}>

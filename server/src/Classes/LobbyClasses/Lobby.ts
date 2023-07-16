@@ -34,8 +34,7 @@ export class Lobby {
 
     public StartGame = (): Room => {
         this.inProgress = true;
-        const players: GamePlayer[] = this.players.map(p => new GamePlayer(p.socket, p.name, room));
-        const room = new Room(this.uid, this.name, players);
+        const room = new Room(this.uid, this.name, this.players);
         this.room = room;
         return room;
     }

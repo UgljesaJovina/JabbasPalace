@@ -12,7 +12,7 @@ Todo:
   ☐ Mercinary
   ☐ Chewbacca
   ☐ Bib Fortuna
-  ☐ LandoCalrissian
+  ☐ Lando Calrissian
   ☐ Boba Stopalic
   ☐ Leia Organa
   ☐ Rancor
@@ -22,6 +22,7 @@ Todo:
 
 all callbacks: 
   error_player_select
+  error_card_select
   eliminate, socketId
   request_player_target, (target: string)
   request_player_card_target, -||-
@@ -31,3 +32,5 @@ all callbacks:
   selected_power, power: number
   draw_me: socketId, cardName
   draw_enemy: socketId
+  request_card_index: (index: number)
+  player_turn, socketId

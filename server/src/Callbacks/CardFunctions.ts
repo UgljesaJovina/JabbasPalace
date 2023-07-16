@@ -4,7 +4,7 @@ import { GamePlayer } from "../Classes/GameClasses/GamePlayer";
 import { Card } from "../Classes/GameClasses/Cards/Card";
 import { ServerSocket } from "../socket";
 
-export const targetPlayer = (player: GamePlayer, room: Room) => {
+export const targetPlayer = async (player: GamePlayer, room: Room) => {
     return new Promise<GamePlayer>((resolve, reject) => {
         player.socket.emit("request_player_target", (targetId: string) => {
             const t = room.getPlayerFromId(targetId);
@@ -19,7 +19,7 @@ export const targetPlayer = (player: GamePlayer, room: Room) => {
     });
 };
 
-export const targetPlayerOrCard = (player: GamePlayer, room: Room) => {
+export const targetPlayerOrCard = async (player: GamePlayer, room: Room) => {
     return new Promise<GamePlayer | Card>((resolve, reject) => {
         player.socket.emit("request_player_card_target", (targetId: string) => {
             if (targetId === "card") {
@@ -37,7 +37,7 @@ export const targetPlayerOrCard = (player: GamePlayer, room: Room) => {
     });
 };
 
-export const selectCardPower = (player: GamePlayer, room: Room) => {
+export const selectCardPower = async (player: GamePlayer, room: Room) => {
     return new Promise<number>(resolve => {
         player.socket.emit("request_card_power", (power: number) => {
             ServerSocket.io.to(room.uid).emit("selected_power", power);
